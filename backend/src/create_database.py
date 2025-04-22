@@ -12,7 +12,7 @@ from langchain_community.document_loaders import Docx2txtLoader
 from langchain_community.document_loaders import UnstructuredPowerPointLoader
 import shutil
 
-MODEL = "qwen2.5:0.5b"
+MODEL = "qwen2.5:3b"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(BASE_DIR, "../data/course_materials")
 VECTORSTORE_PATH = os.path.join(BASE_DIR,  "../data/vector_store")
