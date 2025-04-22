@@ -27,6 +27,8 @@ def query_rag(query_text, history):
     prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
     prompt_value = prompt_template.format_messages(context=context_text, question=query_text)
 
+    print("final prompt value:", prompt_value)
+
     user_message = prompt_value[0]
 
     chat_history = get_history(history)

@@ -2,11 +2,14 @@
 
 import os
 
-from langchain_community.document_loaders import DirectoryLoader, TextLoader, PyPDFDirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_ollama import OllamaEmbeddings
 from langchain.schema import Document
 from langchain_community.vectorstores import FAISS, Chroma
+from langchain_community.document_loaders import DirectoryLoader
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import Docx2txtLoader
+from langchain_community.document_loaders import UnstructuredPowerPointLoader
 import shutil
 
 MODEL = "qwen2.5:0.5b"
@@ -20,22 +23,27 @@ def main():
     save_to_vectorstore(chunks)
 
 
-# for now, it will only load pdf files
-# I will later implement other types
-# see: https://python.langchain.com/docs/how_to/#document-loaders
-# and: https://python.langchain.com/docs/integrations/document_loaders/
 def load_documents():
-    # loader = DirectoryLoader(DATA_PATH, glob="*.txt", loader_cls=TextLoader)
-    loader = PyPDFDirectoryLoader(DATA_PATH, glob="*.pdf")
-    docs = loader.load()
+    loaders = {
+        ".pdf": PyPDFLoader,
+        ".docx": Docx2txtLoader,
+        ".pptx": UnstructuredPowerPointLoader,
+    }
 
-    print(f'loaded docs {len(docs)}')
-    return docs
+    all_documents = []
+    for ext, loader_cls in loaders.items():
+        loader = DirectoryLoader(DATA_PATH, glob=f"**/*{ext}", loader_cls=loader_cls)
+        documents = loader.load()
+        all_documents.extend(documents)
+
+
+    print(f'loaded docs {len(all_documents)} documents')
+    return all_documents
 
 
 def split_text(docs: list[Document]) -> list[Document]:
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=500,
+        chunk_size=1000,
         chunk_overlap=50,
         length_function=len,
         add_start_index=True,
@@ -51,8 +59,6 @@ def split_text(docs: list[Document]) -> list[Document]:
     return all_splits
 
 
-# for embedding see: https://python.langchain.com/docs/how_to/embed_text/
-# vector store stuff: https://python.langchain.com/docs/integrations/vectorstores/faiss/
 def save_to_vectorstore(chunks: list[Document]):
     if os.path.exists(VECTORSTORE_PATH):
         shutil.rmtree(VECTORSTORE_PATH)
@@ -65,7 +71,6 @@ def save_to_vectorstore(chunks: list[Document]):
 def load_vectorstore():
     embeddings = OllamaEmbeddings(model=MODEL)
     return FAISS.load_local("vectorstore", embeddings, allow_dangerous_deserialization=True)
-
 
 
 if __name__ == "__main__":
