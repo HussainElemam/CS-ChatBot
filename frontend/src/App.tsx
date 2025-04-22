@@ -56,8 +56,8 @@ function App() {
       role: msg.sender === "user" ? "user" : "assistant", 
       content: msg.text,
     }));
-    historyToSend.push({ role: "user", content: trimmedMessage });
-    const MAX_HISTORY_LENGTH = 10;
+    // historyToSend.push({ role: "user", content: trimmedMessage });
+    const MAX_HISTORY_LENGTH = 20;
     const truncatedHistory = historyToSend.slice(-MAX_HISTORY_LENGTH);
     setMessages((prevMessages) => [...prevMessages, newUserMessage]);
     setCurrentMessage("");
@@ -75,7 +75,7 @@ function App() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ history: truncatedHistory }),
+        body: JSON.stringify({ history: truncatedHistory, message: newUserMessage }),
       });
 
       if (!response.ok) {
