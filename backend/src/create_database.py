@@ -6,12 +6,13 @@ from langchain_community.document_loaders import DirectoryLoader, TextLoader, Py
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_ollama import OllamaEmbeddings
 from langchain.schema import Document
-from langchain_community.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS, Chroma
 import shutil
 
-
-VECTORSTORE_PATH = "../data/vector_store/vector_store"
-DATA_PATH = "../data/course_materials"
+MODEL = "qwen2.5:0.5b"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.join(BASE_DIR, "../data/course_materials")
+VECTORSTORE_PATH = os.path.join(BASE_DIR,  "../data/vector_store")
 
 def main():
     documents = load_documents()
@@ -28,7 +29,7 @@ def load_documents():
     loader = PyPDFDirectoryLoader(DATA_PATH, glob="*.pdf")
     docs = loader.load()
 
-    print(f"Total characters: {len(docs[0].page_content)}")
+    print(f'loaded docs {len(docs)}')
     return docs
 
 
@@ -56,17 +57,15 @@ def save_to_vectorstore(chunks: list[Document]):
     if os.path.exists(VECTORSTORE_PATH):
         shutil.rmtree(VECTORSTORE_PATH)
 
-    embeddings = OllamaEmbeddings(model="mistral")
-    vectorstore = FAISS.from_documents(chunks, embeddings)
-    vectorstore.save_local(VECTORSTORE_PATH)
-
-    # do I need to return this?
-    return vectorstore
+    embeddings = OllamaEmbeddings(model=MODEL)
+    db = Chroma.from_documents(chunks, embeddings, persist_directory=VECTORSTORE_PATH)
+    print(f'Saved to {VECTORSTORE_PATH}')
 
 
 def load_vectorstore():
-    embeddings = OllamaEmbeddings(model="mistral")
+    embeddings = OllamaEmbeddings(model=MODEL)
     return FAISS.load_local("vectorstore", embeddings, allow_dangerous_deserialization=True)
+
 
 
 if __name__ == "__main__":
