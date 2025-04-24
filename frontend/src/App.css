@@ -11,6 +11,34 @@ body,
   width: 100%;
 }
 
+/* Entire scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px; /* for horizontal scrollbars */
+}
+
+/* Track (background) */
+::-webkit-scrollbar-track {
+  background: white;
+}
+
+/* Handle (thumb) */
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+/* for firefox */
+body {
+  scrollbar-width: thin; /* "auto" or "thin" */
+  scrollbar-color: #888 #f1f1f1; /* thumb, track */
+}
+
 body {
   font-family: sans-serif;
   background-color: #ffffff;
@@ -20,7 +48,7 @@ body {
 }
 
 .chat-page {
-  height: 100%;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center; 
@@ -28,22 +56,24 @@ body {
 }
 
 .chat-container {
+  max-width: 800px;
   width: 100%;
-  max-width: 1024px;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  overflow-y: auto;
+  align-items: center;
 }
 
 .message-list {
   flex-grow: 1; 
-  overflow-y: auto; 
   padding: 20px 15px;
   display: flex;
   flex-direction: column;
   gap: 12px; 
   width: 100%;
+  height: 100%;
 }
 
 .message {
@@ -94,25 +124,47 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 24px;
-  padding: 7px 7px 7px 7px;
-  width: 80%;
-  margin-left: 105px;
+  /* border-radius: 24px; */
+  /* padding: 18px 120px 20px; */
+  padding-bottom: 20px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
 }
 
+.message-end {
+  height: 200px;
+}
 
 .message-input-form {
   display: flex;
   width: 100%;
+  max-width: 800px;
   align-items: center; 
   justify-content: center;
   background-color: #f0f0f0;
   border-radius: 24px;
-  padding: 18px 8px 18px 18px; 
   border: 1px solid #e0e0e0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding-right: 8px;
+  /*position: relative;*/
 }
 
+.message-input-form::after {
+  content: "";
+  position: absolute;
+  width: calc(100% - 21px);
+  height: 74px;
+  background: white;
+  bottom: -25px;
+  z-index: -1;
+}
+
+.input-textarea {
+  max-height: 150px;
+  resize: none;
+  padding: 18px 8px 18px 18px;
+}
 
 .message-input-form textarea {
   flex-grow: 1;

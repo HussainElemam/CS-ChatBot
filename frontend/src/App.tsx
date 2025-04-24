@@ -64,9 +64,9 @@ function App() {
     setIsLoading(true);
 
     setTimeout(() => {
-      if (textareaRef.current) {
-        textareaRef.current.style.height = `${MIN_TEXTAREA_HEIGHT}px`;
-      }
+      // if (textareaRef.current) {
+      //   textareaRef.current.style.height = `${MIN_TEXTAREA_HEIGHT}px`;
+      // }
     }, 0);
 
     try {
@@ -137,7 +137,7 @@ function App() {
               <p>...</p>
             </div>
           )}
-          <div ref={messagesEndRef} />
+          <div className={'message-end'} ref={messagesEndRef} />
         </div>
 
         <div className="input-area">
@@ -154,10 +154,7 @@ function App() {
               onKeyDown={handleKeyDown}
               placeholder="Message..."
               disabled={isLoading}
-              style={{
-                maxHeight: "150px",
-                resize: "none",
-              }}
+              className={'input-textarea'}
             />
             <button type="submit" disabled={isLoading || !currentMessage.trim()}>
               <img src="../assets/up-arrow-svgrepo-com%20(1).svg" className="send-icon"/>
