@@ -12,7 +12,8 @@ from langchain_community.document_loaders import Docx2txtLoader
 from langchain_community.document_loaders import UnstructuredPowerPointLoader
 import shutil
 
-MODEL = "qwen2.5:0.5b"
+MODEL = "qwen2.5:7b"
+EMBEDDING_MODEL = "nomic-embed-text"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(BASE_DIR, "../data/course_materials")
 VECTORSTORE_PATH = os.path.join(BASE_DIR,  "../data/vector_store")
@@ -63,13 +64,13 @@ def save_to_vectorstore(chunks: list[Document]):
     if os.path.exists(VECTORSTORE_PATH):
         shutil.rmtree(VECTORSTORE_PATH)
 
-    embeddings = OllamaEmbeddings(model=MODEL)
+    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
     db = Chroma.from_documents(chunks, embeddings, persist_directory=VECTORSTORE_PATH)
     print(f'Saved to {VECTORSTORE_PATH}')
 
 
 def load_vectorstore():
-    embeddings = OllamaEmbeddings(model=MODEL)
+    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
     return FAISS.load_local("vectorstore", embeddings, allow_dangerous_deserialization=True)
 
 

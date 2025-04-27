@@ -1,10 +1,11 @@
-from langchain_community.llms.ollama import Ollama
+# from langchain_community.llms.ollama import Ollama
+from langchain_ollama import OllamaLLM
 from langchain_community.vectorstores import Chroma
 from langchain_ollama import OllamaEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import HumanMessage, AIMessage
 
-from src.create_database import VECTORSTORE_PATH, MODEL
+from src.create_database import VECTORSTORE_PATH, MODEL, EMBEDDING_MODEL
 
 PROMPT_TEMPLATE = """
 Answer the question based on the following context:
@@ -18,7 +19,7 @@ Answer the question based on the above context: {question}
 
 def query_rag(query_text, history):
     # Prepare the DB.
-    embeddings = OllamaEmbeddings(model=MODEL)
+    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
     db = Chroma(persist_directory=VECTORSTORE_PATH, embedding_function=embeddings)
     # Search the DB.
     results = db.similarity_search_with_relevance_scores(query_text, k=5)
@@ -34,7 +35,7 @@ def query_rag(query_text, history):
     chat_history = get_history(history)
     chat_history.append(user_message)
 
-    model = Ollama(model=MODEL)
+    model = OllamaLLM(model=MODEL)
     response_text = model.invoke(chat_history)
 
     return response_text
