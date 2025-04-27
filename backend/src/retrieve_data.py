@@ -26,7 +26,7 @@ Standalone question:
 """
 
 def query_rag(query_text, history):
-    model = Ollama(model=MODEL)
+    model = OllamaLLM(model=MODEL)
 
     # summarize the conversation to get the context
     prompt_template = ChatPromptTemplate.from_template(GETTING_CONTEXT_PROMPT)
