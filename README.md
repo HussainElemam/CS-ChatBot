@@ -6,7 +6,7 @@ A full-stack Retrieval-Augmented Generation (RAG) chatbot for answering question
 
 CS ChatBot was built to make course content easier to search and understand through natural conversation. Instead of manually looking through lecture files, a user can ask a question and receive an answer grounded in the indexed course documents.
 
-For recruiters, this project demonstrates practical experience with full-stack development, LLM application design, local AI tooling, vector search, and conversational UI implementation.
+The project highlights full-stack development, LLM application design, local AI tooling, vector search, and conversational UI implementation.
 
 ## Features
 
