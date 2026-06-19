@@ -87,11 +87,3 @@ npm run dev
 ```
 
 The frontend runs with Vite, and the backend serves chat responses from `http://localhost:5001/api/chat`.
-
-## What I Built
-
-- Implemented a document ingestion pipeline for course files
-- Built a local vector database workflow for semantic retrieval
-- Connected a conversational React UI to a Flask backend
-- Added chat history handling so follow-up questions can be interpreted in context
-- Used local Ollama models to keep the application independent from hosted AI APIs
